@@ -394,8 +394,14 @@ btnSearch.addEventListener('click', ()=>{
   }
   let out = '';
   found.forEach(x=>{
-    out += `${x.id} — ${x.produk}\nRp ${formatRupiahFromNumber(Number(x.harga))} — ${x.jumlah} pcs\nNomor: ${x.nomor}\nWaktu: ${new Date(x.waktu).toLocaleString()}\n\n`;
-  });
+    out += `${x.id} — ${x.produk}
+Rp ${formatRupiahFromNumber(Number(x.harga))} — ${x.jumlah} pcs
+Nomor: ${x.nomor}
+Garansi: ${x.garansi
+Waktu: ${new Date(x.waktu).toLocaleString()}
+
+`;
+});
   hasilCari.innerText = out;
 });
 function inpSearchValue(){ return inpSearch.value.trim(); }
