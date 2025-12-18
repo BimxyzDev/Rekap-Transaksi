@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Data Transaksi — BIMXYZ OFFICIAL</title>
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --card:#131313;
+    --muted:#bfc7cc;
+    --accent:#1e90ff;
+    --accent-2:#00ffcc;
+    --border:#222;
+    --note-bg:#0f0f10;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:#fff;
+    font-family:Inter, "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
+    padding:20px;
+    -webkit-font-smoothing:antialiased;
+  }
+header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+header h1{font-size:18px;margin:0;color:var(--accent)}
+header p{margin:0;color:var(--muted);font-size:13px}
+
+.layout{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
+@media(max-width:920px){.layout{grid-template-columns:1fr;}}
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:12px;
+padding:16px;
+box-shadow:0 6px 20px rgba(0,0,0,0.4);
+}
+
+label.small{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+input[type="text"], input[type="number"], select{
+width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#0d0d0d;color:#fff;
+outline:none;font-size:14px;
+}
+input[type="text"]::placeholder, input[type="number"]::placeholder{color:#666}
+
+.row{display:flex;gap:12px}
+.row .col{flex:1}
+
+.btn{
+display:inline-block;background:var(--accent);color:#fff;padding:10px 12px;border-radius:8px;border:none;
+cursor:pointer;font-weight:600;margin-top:10px;width:100%;
+}
+.btn.secondary{background:#222;color:var(--muted);border:1px solid #2b2b2b}
+
+/* NOTA */
+.nota-box{
+background:var(--note-bg);
+border-radius:10px;
+border:1px solid #262626;
+padding:14px;
+margin-top:12px;
+color:#fff;
+font-family: "Courier New", monospace;
+white-space:pre-line;
+overflow-wrap:break-word;
+word-break:break-word;
+line-height:1.45;
+font-size:14px;
+}
+.copy-btn{
+margin-top:10px;background:var(--accent);border:none;color:#000;padding:10px;border-radius:8px;cursor:pointer;font-weight:700;
+width:100%;
+}
+
+/* SEARCH */
+#hasilCari{background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #1b1b1b;color:var(--muted);font-family:monospace;white-space:pre-line}
+
+/* LAPORAN */
+.lap-row{display:flex;gap:10px;align-items:center;margin-top:12px}
+.stat{background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #1b1b1b;flex:1;text-align:center}
+.stat h4{margin:0;color:var(--accent);font-size:16px}
+.stat p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+/* TELEGRAM STATUS */
+.telegram-status {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  display: none;
+  font-size: 14px;
+}
+.telegram-status.success {
+  background: rgba(46, 204, 113, 0.2);
+  border: 1px solid #2ecc71;
+  color: #2ecc71;
+  display: block;
+}
+.telegram-status.error {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  display: block;
+}
+.telegram-status.sending {
+  background: rgba(52, 152, 219, 0.2);
+  border: 1px solid #3498db;
+  color: #3498db;
+  display: block;
+}
+
+footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+
+</head>
+<body>
+<header>
+  <div>
+    <h1>📦 Data Transaksi — BIMXYZ OFFICIAL</h1>
+    <p>Input cepat — Nota otomatis — Laporan & total pemasukan</p>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- LEFT -->
+<div>
+
+<div class="card">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Tambah Transaksi Baru</h3>
+  
+  <label class="small">Nama Produk</label>
+  <input id="tx_prod" type="text" placeholder="contoh: panel 5 gb">
+
+  <div class="row" style="margin-top:10px">
+    <div class="col">
+      <label class="small">Harga (IDR)</label>
+      <input id="tx_price" type="text" inputmode="numeric" placeholder="contoh: 2.000">
+    </div>
+    <div class="col" style="max-width:120px">
+      <label class="small">Jumlah</label>
+      <input id="tx_qty" type="number" min="1" value="1">
+    </div>
+  </div>
+
+  <label class="small" style="margin-top:10px">Nomor Pembeli</label>
+  <input id="tx_phone" type="text" placeholder="628xxx (tanpa +)">
+
+  <label class="small" style="margin-top:10px">Garansi</label>
+  <select id="tx_warranty">
+    <option value="" selected disabled>Pilih Garansi</option>
+    <option>15 Hari • 2x Replace</option>
+    <option>Tidak Ada Garansi</option>
+  </select>
+
+  <button id="btn_create" class="btn" style="margin-top:12px">Buat Transaksi</button>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Cari Transaksi</h3>
+  <input id="tx_search" type="text" placeholder="Cari via ID (BIMXYZ-...) atau Nomor Pembeli">
+  <button id="btn_search" class="btn secondary" style="margin-top:8px">Cari</button>
+
+  <div id="hasilCari" style="margin-top:12px;min-height:80px">Hasil pencarian akan muncul di sini.</div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Nota (Preview)</h3>
+  <div id="nota" class="nota-box" aria-live="polite">Belum ada transaksi.</div>
+  <button id="btn_copy" class="copy-btn" style="display:none">SALIN NOTA</button>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<aside>
+
+<div class="card">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Laporan & Statistik</h3>
+
+  <label class="small">Rentang Waktu</label>
+  <select id="report_range">
+    <option value="30d">30 Hari Terakhir</option>
+    <option value="bulan_ini">Bulan Ini</option>
+    <option value="bulan_lalu">Bulan Lalu</option>
+    <option value="365d">1 Tahun Terakhir</option>
+    <option value="tahun_ini">Tahun Ini</option>
+    <option value="tahun_lalu">Tahun Lalu</option>
+    <option value="semua" selected>Semua Transaksi</option>
+  </select>
+
+  <button id="btn_report" class="btn" style="margin-top:10px">Tampilkan Laporan</button>
+
+  <div class="lap-row" style="margin-top:12px">
+    <div class="stat">
+      <h4 id="stat_count">0</h4>
+      <p>Total Transaksi</p>
+    </div>
+    <div class="stat">
+      <h4 id="stat_income">Rp 0</h4>
+      <p>Total Pemasukan</p>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <div id="report_list" style="background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #171717;font-family:monospace;white-space:pre-line;color:var(--muted);min-height:120px">
+    Laporan akan muncul di sini.
+    </div>
+  </div>
+
+  <!-- TELEGRAM EXPORT SECTION -->
+  <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border)">
+    <h4 style="margin:0 0 10px 0;color:var(--accent-2)">📤 Export ke Telegram</h4>
+    
+    <div class="telegram-status" id="telegramStatus"></div>
+    
+    <div class="row" style="margin-top:10px">
+      <div class="col">
+        <button id="btn_export_json" class="btn secondary" style="background:#222">
+          📥 Export JSON
+        </button>
+      </div>
+      <div class="col">
+        <button id="btn_export_telegram" class="btn" style="background:#0088cc">
+          📤 Kirim ke Telegram
+        </button>
+      </div>
+    </div>
+    
+    <div style="margin-top:12px; font-size:12px; color:var(--muted); text-align:center">
+      Data akan dikirim ke Telegram kamu
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top:14px">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Panduan Singkat</h3>
+  <div style="color:var(--muted);font-size:13px;line-height:1.45">
+    - Isi form lalu klik <strong>Buat Transaksi</strong>.<br>
+    - Nota otomatis muncul & bisa disalin.<br>
+    - Gunakan laporan untuk ringkasan periode.<br>
+    - Data disimpan di localStorage (browser).
+  </div>
+</div>
+
+</aside>
+</div>
+
+<footer>© BIMXYZ — SIMPLIFY SELLING</footer>
+
+<script>
+const KEY_DB = 'bimxyz_tx_db_v2';
+const KEY_CNT = 'bimxyz_tx_cnt_v2';
+
+// Telegram Configuration
+const TELEGRAM_BOT_TOKEN = '8111676061:AAFSFXxV4VUA_1AbudGjTQQsgHZZqpOsRuY';
+const TELEGRAM_CHAT_ID = '6629230649';
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+const inpProd = document.getElementById('tx_prod');
+const inpPrice = document.getElementById('tx_price');
+const inpQty = document.getElementById('tx_qty');
+const inpPhone = document.getElementById('tx_phone');
+const inpWarranty = document.getElementById('tx_warranty');
+const btnCreate = document.getElementById('btn_create');
+
+const inpSearch = document.getElementById('tx_search');
+const btnSearch = document.getElementById('btn_search');
+const hasilCari = document.getElementById('hasilCari');
+
+const notaBox = document.getElementById('nota');
+const btnCopy = document.getElementById('btn_copy');
+
+const reportRange = document.getElementById('report_range');
+const btnReport = document.getElementById('btn_report');
+const statCount = document.getElementById('stat_count');
+const statIncome = document.getElementById('stat_income');
+const reportList = document.getElementById('report_list');
+const btnExportJson = document.getElementById('btn_export_json');
+const btnExportTelegram = document.getElementById('btn_export_telegram');
+const telegramStatus = document.getElementById('telegramStatus');
+
+function formatRupiahFromNumber(n){
+  if (!n && n !== 0) return '0';
+  return Number(n).toLocaleString('id-ID');
+}
+function formatRupiahInput(str){
+  const digits = String(str).replace(/\D/g,'');
+  if (!digits) return '';
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function loadDB(){
+  try {
+    return JSON.parse(localStorage.getItem(KEY_DB) || '[]');
+  } catch(e){
+    return [];
+  }
+}
+function saveDB(db){
+  localStorage.setItem(KEY_DB, JSON.stringify(db));
+}
+function nextCounter(){
+  let c = parseInt(localStorage.getItem(KEY_CNT) || '0', 10);
+  c = c + 1;
+  localStorage.setItem(KEY_CNT, String(c));
+  return 1000 + c;
+}
+function genID(){
+  const idnum = nextCounter();
+  return 'BIMXYZ-' + idnum;
+}
+
+inpPrice.addEventListener('input', (e)=>{
+  const cur = e.target.value;
+  const fmt = formatRupiahInput(cur);
+  e.target.value = fmt;
+});
+
+btnCreate.addEventListener('click', ()=>{
+  const prod = inpProd.value.trim();
+  const priceRaw = inpPrice.value.trim().replace(/\./g,'');
+  const qty = parseInt(inpQty.value,10) || 0;
+  const phone = inpPhone.value.trim();
+  const warranty = inpWarranty.value;
+
+  if (!prod || !priceRaw || !qty || !phone || !warranty){
+    alert('Isi semua data dengan benar!');
+    return;
+  }
+
+  const id = genID();
+  const nowIso = new Date().toISOString();
+
+  const tx = {
+    id,
+    produk: prod,
+    harga: String(priceRaw),
+    jumlah: qty,
+    nomor: phone,
+    garansi: warranty,
+    waktu: nowIso
+  };
+
+  const db = loadDB();
+  db.push(tx);
+  saveDB(db);
+
+  renderNota(tx);
+
+  inpProd.value = '';
+  inpPrice.value = '';
+  inpQty.value = '1';
+  inpPhone.value = '';
+  inpWarranty.selectedIndex = 0;
+
+  alert('Transaksi berhasil dibuat!');
+});
+
+function renderNota(tx){
+  const priceDisplay = formatRupiahFromNumber(Number(tx.harga));
+
+  const notaText =
+`*✅ 𝗧𝗥𝗔𝗡𝗦𝗔𝗞𝗦𝗜 𝗗𝗢𝗡𝗘 ✅*
+
+📦 𝗣𝗿𝗼𝗱𝘂𝗸 :  ${tx.produk}
+💰 𝗛𝗮𝗿𝗴𝗮 : 𝑹𝒑 ${priceDisplay}
+🔢 𝗝𝘂𝗺𝗹𝗮𝗵 : ${tx.jumlah}
+♻️ 𝗴𝗮𝗿𝗮𝗻𝘀𝗶 : ${tx.garansi}
+🆔 𝗶𝗱 𝘁𝗿𝗮𝗻𝘀𝗮𝗸𝘀𝗶 : ${tx.id}
+
+📝 *Note*
+MOHON SIMPAN NOTA AGAR BISA KLAIM GARANSI!
+
+🌐 𝗪𝗲𝗯𝘀𝗶𝘁𝗲 𝗥𝗲𝘀𝗺𝗶 : https://www.bimxyz.my.id
+📲 𝗧𝗲𝗿𝗶𝗺𝗮 𝗸𝗮𝘀𝗶𝗵 𝘁𝗲𝗹𝗮𝗵 𝗺𝗲𝗺𝗶𝗹𝗶𝗵 𝗹𝗮𝘆𝗮𝗻𝗮𝗻 𝗸𝗮𝗺𝗶 💚
+🚀 𝗢𝗿𝗱𝗲𝗿 𝘀𝗲𝗹𝗮𝗻𝗷𝘂𝘁𝗻𝘆𝗮 𝗯𝗶𝘀𝗮 𝗹𝗲𝘄𝗮𝘁 𝘄𝗲𝗯 / 𝗰𝗵𝗮𝘁 𝗮𝗱𝗺𝗶𝗻!
+
+`+"`𝙂𝙍𝙐𝘽 𝙈𝘼𝙍𝙆𝙀𝙏𝙋𝙇𝘼𝘾𝙀`"+`
+https://chat.whatsapp.com/BuMum0qkZdkIKer75pqKUK
+
+*𝙅𝘼𝙉𝙂𝘼𝙉 𝙇𝙐𝙋𝘼 𝙁𝙊𝙇𝙊𝙒 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄  𝘿𝘼𝙉 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄 𝙆𝘼𝙈𝙄❗❗*
+`+"`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄`"+`
+https://whatsapp.com/channel/0029VbB7FQv8PgsIvPPuJs2p
+
+`+"`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄`"+`
+https://whatsapp.com/channel/0029Vb6w2Vf65yDE1ww29e0X`;
+
+  notaBox.innerText = notaText;
+  btnCopy.style.display = 'block';
+}
+
+btnCopy.addEventListener('click', async ()=>{
+  const text = notaBox.innerText || '';
+  if (!text) return alert('Belum ada nota untuk disalin.');
+  try{
+    await navigator.clipboard.writeText(text);
+    alert('Berhasil disalin!');
+  }catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+    alert('Berhasil disalin (fallback)!');
+  }
+});
+
+/* SEARCH */
+btnSearch.addEventListener('click', ()=>{
+  const q = inpSearch.value.trim();
+  if (!q) return hasilCari.innerText = 'Masukkan ID atau nomor pembeli untuk mencari.';
+  const db = loadDB();
+  const found = db.filter(x => 
+       x.id.toLowerCase().includes(q.toLowerCase()) 
+    || x.nomor.includes(q)
+  );
+  if (!found.length) {
+    hasilCari.innerText = 'Tidak ditemukan.';
+    return;
+  }
+  let out = '';
+  found.forEach(x=>{
+    out += `${x.id} — ${x.produk}
+Rp ${formatRupiahFromNumber(Number(x.harga))} — ${x.jumlah} pcs
+Nomor: ${x.nomor}
+Garansi: ${x.garansi}
+Waktu: ${new Date(x.waktu).toLocaleString()}
+
+`;
+  });
+  hasilCari.innerText = out;
+});
+
+btnReport.addEventListener('click', ()=>{
+  generateReport(reportRange.value);
+});
+
+function generateReport(rangeKey){
+  const db = loadDB();
+  const now = new Date();
+  const filtered = db.filter(tx => {
+    const t = new Date(tx.waktu);
+    if (rangeKey === 'semua') return true;
+    if (rangeKey === '30d'){
+      return (now - t) <= (30*24*60*60*1000);
+    }
+    if (rangeKey === '365d'){
+      return (now - t) <= (365*24*60*60*1000);
+    }
+    if (rangeKey === 'bulan_ini'){
+      return t.getMonth() === now.getMonth() && t.getFullYear() === now.getFullYear();
+    }
+    if (rangeKey === 'bulan_lalu'){
+      const last = new Date(now.getFullYear(), now.getMonth()-1, 1);
+      return t.getMonth() === last.getMonth() && t.getFullYear() === last.getFullYear();
+    }
+    if (rangeKey === 'tahun_ini'){
+      return t.getFullYear() === now.getFullYear();
+    }
+    if (rangeKey === 'tahun_lalu'){
+      return t.getFullYear() === (now.getFullYear()-1);
+    }
+    return true;
+  });
+
+  const totalIncome = filtered.reduce((s, x)=> s + Number(x.harga), 0);
+  statCount.innerText = filtered.length;
+  statIncome.innerText = 'Rp ' + formatRupiahFromNumber(totalIncome);
+
+  let out = `Rentang: ${reportRange.options[reportRange.selectedIndex].text}\n\n`;
+  out += `Total Transaksi: ${filtered.length}\nTotal Pemasukan: Rp ${formatRupiahFromNumber(totalIncome)}\n\n`;
+  filtered.slice().reverse().forEach(x=>{
+    out += `${x.id} — Rp ${formatRupiahFromNumber(Number(x.harga))} — ${x.produk}\n`;
+  });
+
+  reportList.innerText = out || 'Tidak ada data.';
+}
+
+/* EXPORT JSON (Download File) */
+btnExportJson.addEventListener('click', ()=>{
+  const db = loadDB();
+  const cnt = localStorage.getItem(KEY_CNT) || '0';
+  
+  const exportData = {
+    database: db,
+    counter: cnt,
+    export_date: new Date().toISOString(),
+    total_transactions: db.length,
+    total_income: db.reduce((sum, tx) => sum + Number(tx.harga || 0), 0)
+  };
+  
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bimxyz_tx_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* KIRIM KE TELEGRAM */
+btnExportTelegram.addEventListener('click', async ()=>{
+  const db = loadDB();
+  const cnt = localStorage.getItem(KEY_CNT) || '0';
+  
+  if (db.length === 0) {
+    showTelegramStatus('Tidak ada data transaksi untuk dikirim.', 'error');
+    return;
+  }
+  
+  // Show sending status
+  showTelegramStatus('⏳ Mengirim data ke Telegram...', 'sending');
+  
+  // Prepare data
+  const exportData = {
+    database: db,
+    counter: cnt,
+    export_date: new Date().toISOString(),
+    total_transactions: db.length,
+    total_income: db.reduce((sum, tx) => sum + Number(tx.harga || 0), 0)
+  };
+  
+  // Format message for Telegram
+  const totalIncome = exportData.total_income;
+  const formattedIncome = formatRupiahFromNumber(totalIncome);
+  
+  let message = `📊 *BIMXYZ DATA EXPORT*\n`;
+  message += `📅 ${new Date().toLocaleString('id-ID')}\n\n`;
+  message += `📈 *STATISTIK*\n`;
+  message += `• Total Transaksi: ${db.length}\n`;
+  message += `• Counter: ${cnt}\n`;
+  message += `• Total Pemasukan: Rp ${formattedIncome}\n\n`;
+  
+  // Add last 5 transactions
+  message += `🔄 *TRANSAKSI TERAKHIR (5)*\n`;
+  const lastTransactions = db.slice(-5).reverse();
+  lastTransactions.forEach((tx, idx) => {
+    message += `${idx+1}. ${tx.id}\n`;
+    message += `   Produk: ${tx.produk}\n`;
+    message += `   Harga: Rp ${formatRupiahFromNumber(Number(tx.harga))}\n`;
+    message += `   Nomor: ${tx.nomor}\n`;
+    message += `   Waktu: ${new Date(tx.waktu).toLocaleDateString('id-ID')}\n\n`;
+  });
+  
+  // Add JSON data as a code block
+  message += `\`\`\`json\n`;
+  message += JSON.stringify(exportData, null, 2).slice(0, 3500); // Telegram limit
+  if (JSON.stringify(exportData, null, 2).length > 3500) {
+    message += '\n... (data dipotong karena terlalu panjang)';
+  }
+  message += `\n\`\`\``;
+  
+  try {
+    // Send to Telegram
+    const response = await fetch(TELEGRAM_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'Markdown'
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (result.ok) {
+      showTelegramStatus('✅ Data berhasil dikirim ke Telegram!', 'success');
+      
+      // Also send JSON file if data is large
+      if (JSON.stringify(exportData).length > 1000) {
+        setTimeout(async () => {
+          const blob = new Blob([JSON.stringify(exportData, null, 2)], {type: 'application/json'});
+          const formData = new FormData();
+          formData.append('chat_id', TELEGRAM_CHAT_ID);
+          formData.append('document', blob, `bimxyz_backup_${Date.now()}.json`);
+          formData.append('caption', `📁 Backup data BIMXYZ - ${new Date().toLocaleString('id-ID')}`);
+          
+          try {
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`, {
+              method: 'POST',
+              body: formData
+            });
+            showTelegramStatus('✅ Data berhasil dikirim ke Telegram (dengan file JSON)!', 'success');
+          } catch (fileError) {
+            console.log('File send skipped:', fileError);
+          }
+        }, 1000);
+      }
+    } else {
+      showTelegramStatus(`❌ Gagal mengirim: ${result.description || 'Unknown error'}`, 'error');
+    }
+  } catch (error) {
+    console.error('Telegram send error:', error);
+    showTelegramStatus(`❌ Error: ${error.message}`, 'error');
+  }
+});
+
+function showTelegramStatus(message, type) {
+  telegramStatus.textContent = message;
+  telegramStatus.className = 'telegram-status ' + type;
+  
+  // Auto hide after 5 seconds for success messages
+  if (type === 'success') {
+    setTimeout(() => {
+      telegramStatus.style.display = 'none';
+    }, 5000);
+  }
+}
+
+/* AUTO BACKUP TO TELEGRAM EVERY 24 HOURS */
+function setupAutoBackup() {
+  const lastBackup = localStorage.getItem('bimxyz_last_backup');
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  
+  // Check if 24 hours have passed since last backup
+  if (!lastBackup || (now - parseInt(lastBackup)) > oneDay) {
+    const db = loadDB();
+    if (db.length > 0) {
+      // Auto backup in background (silent)
+      setTimeout(() => {
+        const autoBackupData = {
+          database: db,
+          counter: localStorage.getItem(KEY_CNT) || '0',
+          export_date: new Date().toISOString(),
+          total_transactions: db.length,
+          auto_backup: true
+        };
+        
+        // Send silent backup (no UI feedback)
+        fetch(TELEGRAM_API_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: `🔒 *AUTO BACKUP BIMXYZ*\n📊 ${db.length} transaksi\n📅 ${new Date().toLocaleDateString('id-ID')}\n\n\`\`\`json\n${JSON.stringify(autoBackupData, null, 2).slice(0, 1000)}\n\`\`\``,
+            parse_mode: 'Markdown'
+          })
+        }).then(() => {
+          localStorage.setItem('bimxyz_last_backup', String(Date.now()));
+        }).catch(() => {
+          // Silent fail
+        });
+      }, 10000); // Wait 10 seconds after page load
+    }
+  }
+}
+
+(function init(){
+  if (!localStorage.getItem(KEY_CNT)) {
+    const db = loadDB();
+    localStorage.setItem(KEY_CNT, String(db.length));
+  }
+  generateReport('semua');
+  setupAutoBackup();
+})();
+</script>
+</body>
+</html>
