@@ -1,452 +1,497 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Data Transaksi — BIMXYZ OFFICIAL</title>
-<style>
-  :root{
-    --bg:#0a0a0a;
-    --card:#131313;
-    --muted:#bfc7cc;
-    --accent:#1e90ff;
-    --accent-2:#00ffcc;
-    --border:#222;
-    --note-bg:#0f0f10;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:#fff;
-    font-family:Inter, "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
-    padding:20px;
-    -webkit-font-smoothing:antialiased;
-  }
-header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-header h1{font-size:18px;margin:0;color:var(--accent)}
-header p{margin:0;color:var(--muted);font-size:13px}
-
-.layout{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
-@media(max-width:920px){.layout{grid-template-columns:1fr;}}
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:12px;
-padding:16px;
-box-shadow:0 6px 20px rgba(0,0,0,0.4);
-}
-
-label.small{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
-input[type="text"], input[type="number"], select{
-width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#0d0d0d;color:#fff;
-outline:none;font-size:14px;
-}
-input[type="text"]::placeholder, input[type="number"]::placeholder{color:#666}
-
-.row{display:flex;gap:12px}
-.row .col{flex:1}
-
-.btn{
-display:inline-block;background:var(--accent);color:#fff;padding:10px 12px;border-radius:8px;border:none;
-cursor:pointer;font-weight:600;margin-top:10px;width:100%;
-}
-.btn.secondary{background:#222;color:var(--muted);border:1px solid #2b2b2b}
-
-/* NOTA */
-.nota-box{
-background:var(--note-bg);
-border-radius:10px;
-border:1px solid #262626;
-padding:14px;
-margin-top:12px;
-color:#fff;
-font-family: "Courier New", monospace;
-white-space:pre-line;
-overflow-wrap:break-word;
-word-break:break-word;
-line-height:1.45;
-font-size:14px;
-}
-.copy-btn{
-margin-top:10px;background:var(--accent);border:none;color:#000;padding:10px;border-radius:8px;cursor:pointer;font-weight:700;
-width:100%;
-}
-
-/* SEARCH */
-#hasilCari{background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #1b1b1b;color:var(--muted);font-family:monospace;white-space:pre-line}
-
-/* LAPORAN */
-.lap-row{display:flex;gap:10px;align-items:center;margin-top:12px}
-.stat{background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #1b1b1b;flex:1;text-align:center}
-.stat h4{margin:0;color:var(--accent);font-size:16px}
-.stat p{margin:6px 0 0;color:var(--muted);font-size:13px}
-
-footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penampil Data LocalStorage</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #856404;
+        }
+        
+        .warning h3 {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .warning h3:before {
+            content: "⚠️";
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #2980b9;
+        }
+        
+        .button-danger {
+            background-color: #e74c3c;
+        }
+        
+        .button-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .button-success {
+            background-color: #2ecc71;
+        }
+        
+        .button-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .search-box {
+            flex-grow: 1;
+            max-width: 400px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .data-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stat-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .keys-container {
+            margin-top: 20px;
+        }
+        
+        .key-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .key-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .key-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .key-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            word-break: break-all;
+        }
+        
+        .key-size {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .key-value {
+            background-color: white;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #95a5a6;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-<header>
-  <div>
-    <h1>📦 Data Transaksi — BIMXYZ OFFICIAL</h1>
-    <p>Input cepat — Nota otomatis — Laporan & total pemasukan</p>
-  </div>
-</header>
-
-<div class="layout">
-
-<!-- LEFT -->
-<div>
-
-<div class="card">
-  <h3 style="margin:0 0 8px 0;color:var(--accent)">Tambah Transaksi Baru</h3>
-  
-  <label class="small">Nama Produk</label>
-  <input id="tx_prod" type="text" placeholder="contoh: panel 5 gb">
-
-  <div class="row" style="margin-top:10px">
-    <div class="col">
-      <label class="small">Harga (IDR)</label>
-      <input id="tx_price" type="text" inputmode="numeric" placeholder="contoh: 2.000">
+    <div class="header">
+        <h1>Penampil Data LocalStorage</h1>
+        <p class="subtitle">Menampilkan data dari localStorage tanpa merusak data yang ada</p>
     </div>
-    <div class="col" style="max-width:120px">
-      <label class="small">Jumlah</label>
-      <input id="tx_qty" type="number" min="1" value="1">
+    
+    <div class="warning">
+        <h3>Peringatan Penting</h3>
+        <p>Data di localStorage sangat penting. Halaman ini hanya menampilkan data tanpa mengubahnya, kecuali Anda secara eksplisit menggunakan tombol "Hapus" pada item tertentu. Gunakan dengan hati-hati!</p>
     </div>
-  </div>
-
-  <label class="small" style="margin-top:10px">Nomor Pembeli</label>
-  <input id="tx_phone" type="text" placeholder="628xxx (tanpa +)">
-
-  <label class="small" style="margin-top:10px">Garansi</label>
-  <select id="tx_warranty">
-    <option value="" selected disabled>Pilih Garansi</option>
-    <option>15 Hari • 2x Replace</option>
-    <option>Tidak Ada Garansi</option>
-  </select>
-
-  <button id="btn_create" class="btn" style="margin-top:12px">Buat Transaksi</button>
-</div>
-
-<div class="card" style="margin-top:14px">
-  <h3 style="margin:0 0 8px 0;color:var(--accent)">Cari Transaksi</h3>
-  <input id="tx_search" type="text" placeholder="Cari via ID (BIMXYZ-...) atau Nomor Pembeli">
-  <button id="btn_search" class="btn secondary" style="margin-top:8px">Cari</button>
-
-  <div id="hasilCari" style="margin-top:12px;min-height:80px">Hasil pencarian akan muncul di sini.</div>
-</div>
-
-<div class="card" style="margin-top:14px">
-  <h3 style="margin:0 0 8px 0;color:var(--accent)">Nota (Preview)</h3>
-  <div id="nota" class="nota-box" aria-live="polite">Belum ada transaksi.</div>
-  <button id="btn_copy" class="copy-btn" style="display:none">SALIN NOTA</button>
-</div>
-
-</div>
-
-<!-- RIGHT -->
-<aside>
-
-<div class="card">
-  <h3 style="margin:0 0 8px 0;color:var(--accent)">Laporan & Statistik</h3>
-
-  <label class="small">Rentang Waktu</label>
-  <select id="report_range">
-    <option value="30d">30 Hari Terakhir</option>
-    <option value="bulan_ini">Bulan Ini</option>
-    <option value="bulan_lalu">Bulan Lalu</option>
-    <option value="365d">1 Tahun Terakhir</option>
-    <option value="tahun_ini">Tahun Ini</option>
-    <option value="tahun_lalu">Tahun Lalu</option>
-    <option value="semua" selected>Semua Transaksi</option>
-  </select>
-
-  <button id="btn_report" class="btn" style="margin-top:10px">Tampilkan Laporan</button>
-
-  <div class="lap-row" style="margin-top:12px">
-    <div class="stat">
-      <h4 id="stat_count">0</h4>
-      <p>Total Transaksi</p>
+    
+    <div class="controls">
+        <div>
+            <button class="button" id="refreshBtn">Muat Ulang Data</button>
+            <button class="button button-success" id="exportBtn">Ekspor Semua Data</button>
+        </div>
+        <input type="text" class="search-box" id="searchInput" placeholder="Cari kunci atau nilai...">
     </div>
-    <div class="stat">
-      <h4 id="stat_income">Rp 0</h4>
-      <p>Total Pemasukan</p>
+    
+    <div class="data-container">
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-value" id="totalKeys">0</div>
+                <div class="stat-label">Total Kunci</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalSize">0 KB</div>
+                <div class="stat-label">Total Ukuran</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="availableSpace">~ KB</div>
+                <div class="stat-label">Ruang Tersedia</div>
+            </div>
+        </div>
+        
+        <div class="keys-container" id="keysContainer">
+            <!-- Data dari localStorage akan ditampilkan di sini -->
+        </div>
     </div>
-  </div>
-
-  <div style="margin-top:12px">
-    <div id="report_list" style="background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #171717;font-family:monospace;white-space:pre-line;color:var(--muted);min-height:120px">
-    Laporan akan muncul di sini.
+    
+    <div class="footer">
+        <p>Halaman ini hanya membaca data dari localStorage browser Anda. Data tidak akan dikirim ke server manapun.</p>
+        <p>© 2023 Penampil Data LocalStorage</p>
     </div>
-  </div>
 
-  <div style="margin-top:12px">
-    <button id="btn_export" class="btn secondary">Export JSON</button>
-  </div>
-</div>
-
-<div class="card" style="margin-top:14px">
-  <h3 style="margin:0 0 8px 0;color:var(--accent)">Panduan Singkat</h3>
-  <div style="color:var(--muted);font-size:13px;line-height:1.45">
-    - Isi form lalu klik <strong>Buat Transaksi</strong>.<br>
-    - Nota otomatis muncul & bisa disalin.<br>
-    - Gunakan laporan untuk ringkasan periode.<br>
-    - Data disimpan di localStorage (browser).
-  </div>
-</div>
-
-</aside>
-</div>
-
-<footer>© BIMXYZ — SIMPLIFY SELLING</footer>
-
-<script>
-const KEY_DB = 'bimxyz_tx_db_v2';
-const KEY_CNT = 'bimxyz_tx_cnt_v2';
-
-const inpProd = document.getElementById('tx_prod');
-const inpPrice = document.getElementById('tx_price');
-const inpQty = document.getElementById('tx_qty');
-const inpPhone = document.getElementById('tx_phone');
-const inpWarranty = document.getElementById('tx_warranty');
-const btnCreate = document.getElementById('btn_create');
-
-const inpSearch = document.getElementById('tx_search');
-const btnSearch = document.getElementById('btn_search');
-const hasilCari = document.getElementById('hasilCari');
-
-const notaBox = document.getElementById('nota');
-const btnCopy = document.getElementById('btn_copy');
-
-const reportRange = document.getElementById('report_range');
-const btnReport = document.getElementById('btn_report');
-const statCount = document.getElementById('stat_count');
-const statIncome = document.getElementById('stat_income');
-const reportList = document.getElementById('report_list');
-const btnExport = document.getElementById('btn_export');
-
-function formatRupiahFromNumber(n){
-  if (!n && n !== 0) return '0';
-  return Number(n).toLocaleString('id-ID');
-}
-function formatRupiahInput(str){
-  const digits = String(str).replace(/\D/g,'');
-  if (!digits) return '';
-  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-function loadDB(){
-  try {
-    return JSON.parse(localStorage.getItem(KEY_DB) || '[]');
-  } catch(e){
-    return [];
-  }
-}
-function saveDB(db){
-  localStorage.setItem(KEY_DB, JSON.stringify(db));
-}
-function nextCounter(){
-  let c = parseInt(localStorage.getItem(KEY_CNT) || '0', 10);
-  c = c + 1;
-  localStorage.setItem(KEY_CNT, String(c));
-  return 1000 + c;
-}
-function genID(){
-  const idnum = nextCounter();
-  return 'BIMXYZ-' + idnum;
-}
-
-inpPrice.addEventListener('input', (e)=>{
-  const cur = e.target.value;
-  const fmt = formatRupiahInput(cur);
-  e.target.value = fmt;
-});
-
-btnCreate.addEventListener('click', ()=>{
-  const prod = inpProd.value.trim();
-  const priceRaw = inpPrice.value.trim().replace(/\./g,'');
-  const qty = parseInt(inpQty.value,10) || 0;
-  const phone = inpPhone.value.trim();
-  const warranty = inpWarranty.value;
-
-  if (!prod || !priceRaw || !qty || !phone || !warranty){
-    alert('Isi semua data dengan benar!');
-    return;
-  }
-
-  const id = genID();
-  const nowIso = new Date().toISOString();
-
-  const tx = {
-    id,
-    produk: prod,
-    harga: String(priceRaw),
-    jumlah: qty,
-    nomor: phone,
-    garansi: warranty,
-    waktu: nowIso
-  };
-
-  const db = loadDB();
-  db.push(tx);
-  saveDB(db);
-
-  renderNota(tx);
-
-  inpProd.value = '';
-  inpPrice.value = '';
-  inpQty.value = '1';
-  inpPhone.value = '';
-  inpWarranty.selectedIndex = 0;
-
-  alert('Transaksi berhasil dibuat!');
-});
-
-function renderNota(tx){
-  const priceDisplay = formatRupiahFromNumber(Number(tx.harga));
-
-  const notaText =
-`*✅ 𝗧𝗥𝗔𝗡𝗦𝗔𝗞𝗦𝗜 𝗗𝗢𝗡𝗘 ✅*
-
-📦 𝗣𝗿𝗼𝗱𝘂𝗸 :  ${tx.produk}
-💰 𝗛𝗮𝗿𝗴𝗮 : 𝑹𝒑 ${priceDisplay}
-🔢 𝗝𝘂𝗺𝗹𝗮𝗵 : ${tx.jumlah}
-♻️ 𝗴𝗮𝗿𝗮𝗻𝘀𝗶 : ${tx.garansi}
-🆔 𝗶𝗱 𝘁𝗿𝗮𝗻𝘀𝗮𝗸𝘀𝗶 : ${tx.id}
-
-📝 *Note*
-𝙎𝘼𝙑𝙀 𝙉𝙊𝙈𝙊𝙍 𝘼𝘿𝙈𝙄𝙉 𝙆𝘼𝙍𝙀𝙉𝘼 𝙉𝙊𝙈𝙊𝙍𝙈𝙐 𝙎𝙐𝙎𝘼𝙃 𝘿𝙄 𝙎𝘼𝙑𝙀
-
-🌐 𝗪𝗲𝗯𝘀𝗶𝘁𝗲 𝗥𝗲𝘀𝗺𝗶 : https://www.bimxyz.my.id
-📲 𝗧𝗲𝗿𝗶𝗺𝗮 𝗸𝗮𝘀𝗶𝗵 𝘁𝗲𝗹𝗮𝗵 𝗺𝗲𝗺𝗶𝗹𝗶𝗵 𝗹𝗮𝘆𝗮𝗻𝗮𝗻 𝗸𝗮𝗺𝗶 💚
-🚀 𝗢𝗿𝗱𝗲𝗿 𝘀𝗲𝗹𝗮𝗻𝗷𝘂𝘁𝗻𝘆𝗮 𝗯𝗶𝘀𝗮 𝗹𝗲𝘄𝗮𝘁 𝘄𝗲𝗯 / 𝗰𝗵𝗮𝘁 𝗮𝗱𝗺𝗶𝗻!
-
-`+"`𝙂𝙍𝙐𝘽 𝙈𝘼𝙍𝙆𝙀𝙏𝙋𝙇𝘼𝘾𝙀`"+`
-https://chat.whatsapp.com/BuMum0qkZdkIKer75pqKUK
-
-*𝙅𝘼𝙉𝙂𝘼𝙉 𝙇𝙐𝙋𝘼 𝙁𝙊𝙇𝙊𝙒 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄  𝘿𝘼𝙉 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄 𝙆𝘼𝙈𝙄❗❗*
-`+"`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄`"+`
-https://whatsapp.com/channel/0029VbB7FQv8PgsIvPPuJs2p
-
-`+"`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄`"+`
-https://whatsapp.com/channel/0029Vb6w2Vf65yDE1ww29e0X
-
-MOHON SIMPAN NOTA AGAR BISA KLAIM GARANSI!`;
-
-  notaBox.innerText = notaText;
-  btnCopy.style.display = 'block';
-}
-
-btnCopy.addEventListener('click', async ()=>{
-  const text = notaBox.innerText || '';
-  if (!text) return alert('Belum ada nota untuk disalin.');
-  try{
-    await navigator.clipboard.writeText(text);
-    alert('Berhasil disalin!');
-  }catch(e){
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-    alert('Berhasil disalin (fallback)!');
-  }
-});
-
-/* SEARCH (DITAMBAH GARANSI) */
-btnSearch.addEventListener('click', ()=>{
-  const q = inpSearchValue();
-  if (!q) return hasilCari.innerText = 'Masukkan ID atau nomor pembeli untuk mencari.';
-  const db = loadDB();
-  const found = db.filter(x => 
-       x.id.toLowerCase().includes(q.toLowerCase()) 
-    || x.nomor.includes(q)
-  );
-  if (!found.length) {
-    hasilCari.innerText = 'Tidak ditemukan.';
-    return;
-  }
-  let out = '';
-  found.forEach(x=>{
-    out += `${x.id} — ${x.produk}
-Rp ${formatRupiahFromNumber(Number(x.harga))} — ${x.jumlah} pcs
-Nomor: ${x.nomor}
-Garansi: ${x.garansi}
-Waktu: ${new Date(x.waktu).toLocaleString()}
-
-`;
-  });
-  hasilCari.innerText = out;
-});
-function inpSearchValue(){ return inpSearch.value.trim(); }
-
-btnReport.addEventListener('click', ()=>{
-  generateReport(reportRange.value);
-});
-
-function generateReport(rangeKey){
-  const db = loadDB();
-  const now = new Date();
-  const filtered = db.filter(tx => {
-    const t = new Date(tx.waktu);
-    if (rangeKey === 'semua') return true;
-    if (rangeKey === '30d'){
-      return (now - t) <= (30*24*60*60*1000);
-    }
-    if (rangeKey === '365d'){
-      return (now - t) <= (365*24*60*60*1000);
-    }
-    if (rangeKey === 'bulan_ini'){
-      return t.getMonth() === now.getMonth() && t.getFullYear() === now.getFullYear();
-    }
-    if (rangeKey === 'bulan_lalu'){
-      const last = new Date(now.getFullYear(), now.getMonth()-1, 1);
-      return t.getMonth() === last.getMonth() && t.getFullYear() === last.getFullYear();
-    }
-    if (rangeKey === 'tahun_ini'){
-      return t.getFullYear() === now.getFullYear();
-    }
-    if (rangeKey === 'tahun_lalu'){
-      return t.getFullYear() === (now.getFullYear()-1);
-    }
-    return true;
-  });
-
-  const totalIncome = filtered.reduce((s, x)=> s + Number(x.harga), 0);
-  statCount.innerText = filtered.length;
-  statIncome.innerText = 'Rp ' + formatRupiahFromNumber(totalIncome);
-
-  let out = `Rentang: ${reportRange.options[reportRange.selectedIndex].text}\n\n`;
-  out += `Total Transaksi: ${filtered.length}\nTotal Pemasukan: Rp ${formatRupiahFromNumber(totalIncome)}\n\n`;
-  filtered.slice().reverse().forEach(x=>{
-    out += `${x.id} — Rp ${formatRupiahFromNumber(Number(x.harga))} — ${x.produk}\n`;
-  });
-
-  reportList.innerText = out || 'Tidak ada data.';
-}
-
-btnExport.addEventListener('click', ()=>{
-  const db = loadDB();
-  const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `bimxyz_tx_${new Date().toISOString().slice(0,10)}.json`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-});
-
-(function init(){
-  if (!localStorage.getItem(KEY_CNT)) {
-    const db = loadDB();
-    localStorage.setItem(KEY_CNT, String(db.length));
-  }
-  generateReport('semua');
-})();
-</script>
+    <script>
+        // Fungsi untuk menghitung ukuran data dalam KB
+        function calculateSize(data) {
+            return (new Blob([data]).size / 1024).toFixed(2);
+        }
+        
+        // Fungsi untuk memuat dan menampilkan data dari localStorage
+        function loadLocalStorageData(filter = '') {
+            const keysContainer = document.getElementById('keysContainer');
+            const totalKeysElement = document.getElementById('totalKeys');
+            const totalSizeElement = document.getElementById('totalSize');
+            
+            // Bersihkan kontainer
+            keysContainer.innerHTML = '';
+            
+            // Dapatkan semua kunci dari localStorage
+            const keys = Object.keys(localStorage);
+            
+            // Filter kunci jika ada pencarian
+            const filteredKeys = filter 
+                ? keys.filter(key => 
+                    key.toLowerCase().includes(filter.toLowerCase()) || 
+                    localStorage.getItem(key).toLowerCase().includes(filter.toLowerCase())
+                  )
+                : keys;
+            
+            // Update statistik
+            totalKeysElement.textContent = filteredKeys.length;
+            
+            // Hitung total ukuran data
+            let totalSize = 0;
+            
+            // Jika tidak ada data
+            if (filteredKeys.length === 0) {
+                keysContainer.innerHTML = `
+                    <div class="empty-state">
+                        <h3>Tidak ada data di localStorage</h3>
+                        <p>${filter ? 'Tidak ada data yang cocok dengan pencarian Anda' : 'LocalStorage kosong atau data tidak dapat diakses'}</p>
+                    </div>
+                `;
+                totalSizeElement.textContent = '0 KB';
+                return;
+            }
+            
+            // Tampilkan setiap kunci dan nilainya
+            filteredKeys.forEach(key => {
+                try {
+                    const value = localStorage.getItem(key);
+                    const size = calculateSize(value);
+                    totalSize += parseFloat(size);
+                    
+                    // Buat elemen untuk setiap item
+                    const keyElement = document.createElement('div');
+                    keyElement.className = 'key-item';
+                    keyElement.innerHTML = `
+                        <div class="key-header">
+                            <div class="key-name">${escapeHtml(key)}</div>
+                            <div class="key-size">${size} KB</div>
+                        </div>
+                        <div class="key-value">${escapeHtml(formatValue(value))}</div>
+                        <div style="margin-top: 10px; display: flex; gap: 10px;">
+                            <button class="button button-danger" onclick="deleteKey('${escapeHtml(key)}')">Hapus Kunci Ini</button>
+                            <button class="button" onclick="copyToClipboard('${escapeHtml(key)}', 'key')">Salin Nama Kunci</button>
+                            <button class="button" onclick="copyToClipboard('${escapeHtml(value)}', 'value')">Salin Nilai</button>
+                        </div>
+                    `;
+                    
+                    keysContainer.appendChild(keyElement);
+                } catch (error) {
+                    console.error(`Error membaca kunci ${key}:`, error);
+                }
+            });
+            
+            // Update total ukuran
+            totalSizeElement.textContent = `${totalSize.toFixed(2)} KB`;
+        }
+        
+        // Fungsi untuk menghitung ruang tersedia di localStorage
+        function calculateAvailableSpace() {
+            try {
+                // Coba simpan data sampai localStorage penuh untuk memperkirakan ruang tersedia
+                let data = "a";
+                let totalData = "";
+                
+                // Coba tambahkan data sampai mencapai batas (metode ini aman karena tidak mengubah data yang ada)
+                while (true) {
+                    try {
+                        totalData += data;
+                        // Gunakan kunci sementara untuk tes
+                        localStorage.setItem("__temp_test_key__", totalData);
+                    } catch (e) {
+                        // localStorage penuh
+                        break;
+                    }
+                }
+                
+                // Hapus kunci tes
+                localStorage.removeItem("__temp_test_key__");
+                
+                // Hitung ukuran dalam KB
+                const availableKB = (totalData.length / 1024).toFixed(2);
+                document.getElementById('availableSpace').textContent = `${availableKB} KB`;
+            } catch (error) {
+                console.error("Tidak dapat menghitung ruang tersedia:", error);
+                document.getElementById('availableSpace').textContent = "Tidak diketahui";
+            }
+        }
+        
+        // Fungsi untuk menghapus kunci tertentu (dengan konfirmasi)
+        function deleteKey(key) {
+            if (confirm(`Apakah Anda yakin ingin menghapus kunci "${key}"?`)) {
+                try {
+                    localStorage.removeItem(key);
+                    alert(`Kunci "${key}" telah dihapus.`);
+                    loadLocalStorageData(document.getElementById('searchInput').value);
+                    calculateAvailableSpace();
+                } catch (error) {
+                    alert(`Gagal menghapus kunci "${key}": ${error.message}`);
+                }
+            }
+        }
+        
+        // Fungsi untuk menyalin ke clipboard
+        function copyToClipboard(text, type) {
+            // Decode HTML entities sebelum menyalin
+            const decodedText = decodeHtmlEntities(text);
+            
+            navigator.clipboard.writeText(decodedText)
+                .then(() => {
+                    alert(`${type === 'key' ? 'Nama kunci' : 'Nilai'} berhasil disalin ke clipboard!`);
+                })
+                .catch(err => {
+                    console.error('Gagal menyalin: ', err);
+                    alert('Gagal menyalin ke clipboard.');
+                });
+        }
+        
+        // Fungsi untuk mengekspor semua data sebagai file JSON
+        function exportAllData() {
+            const allData = {};
+            
+            // Kumpulkan semua data dari localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                allData[key] = localStorage.getItem(key);
+            }
+            
+            // Buat blob dan unduh
+            const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `localstorage-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`Data telah diekspor ke file ${a.download}`);
+        }
+        
+        // Fungsi untuk memformat nilai agar lebih mudah dibaca
+        function formatValue(value) {
+            // Coba parse sebagai JSON
+            try {
+                const parsed = JSON.parse(value);
+                return JSON.stringify(parsed, null, 2);
+            } catch (e) {
+                // Bukan JSON, kembalikan aslinya
+                return value;
+            }
+        }
+        
+        // Fungsi untuk escape HTML (mencegah XSS)
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Fungsi untuk decode HTML entities
+        function decodeHtmlEntities(text) {
+            const textarea = document.createElement('textarea');
+            textarea.innerHTML = text;
+            return textarea.value;
+        }
+        
+        // Inisialisasi halaman
+        document.addEventListener('DOMContentLoaded', function() {
+            // Muat data saat halaman dimuat
+            loadLocalStorageData();
+            calculateAvailableSpace();
+            
+            // Setup event listener untuk tombol refresh
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                loadLocalStorageData(document.getElementById('searchInput').value);
+                calculateAvailableSpace();
+            });
+            
+            // Setup event listener untuk pencarian
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                loadLocalStorageData(e.target.value);
+            });
+            
+            // Setup event listener untuk tombol ekspor
+            document.getElementById('exportBtn').addEventListener('click', exportAllData);
+            
+            // Tampilkan notifikasi bahwa data aman
+            console.log('Halaman penampil data localStorage dimuat. Data hanya dibaca, tidak diubah.');
+        });
+    </script>
 </body>
-        </html>
+  </html>
