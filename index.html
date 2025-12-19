@@ -126,52 +126,55 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
 <div class="card">
   <h3>Tambah Transaksi Baru</h3>
   
-  <label>Nama Produk</label>
+  <label class="small">Nama Produk</label>
   <input id="tx_prod" type="text" placeholder="contoh: panel 5 gb">
 
-  <div class="row">
+  <div class="row" style="margin-top:10px">
     <div class="col">
-      <label>Harga (IDR)</label>
+      <label class="small">Harga (IDR)</label>
       <input id="tx_price" type="text" inputmode="numeric" placeholder="contoh: 2.000">
     </div>
-    <div class="col">
-      <label>Jumlah</label>
+    <div class="col" style="max-width:120px">
+      <label class="small">Jumlah</label>
       <input id="tx_qty" type="number" min="1" value="1">
     </div>
   </div>
 
-  <label>Nomor Pembeli</label>
+  <label class="small" style="margin-top:10px">Nomor Pembeli</label>
   <input id="tx_phone" type="text" placeholder="+628xxx atau 08xxx" onblur="formatPhoneNumber(this)">
 
-  <label>Garansi</label>
+  <label class="small" style="margin-top:10px">Garansi</label>
   <select id="tx_warranty">
     <option value="" selected disabled>Pilih Garansi</option>
     <option>15 Hari • 2x Replace</option>
     <option>Tidak Ada Garansi</option>
   </select>
 
-  <button id="btn_create" class="btn">Buat Transaksi</button>
+  <button id="btn_create" class="btn" style="margin-top:12px">Buat Transaksi</button>
 </div>
 
-<div class="card">
+<div class="card" style="margin-top:14px">
   <h3>Cari Transaksi</h3>
   <input id="tx_search" type="text" placeholder="Cari via ID (BIMXYZ-...) atau Nomor Pembeli">
-  <button id="btn_search" class="btn secondary">Cari</button>
-  <div id="hasilCari">Hasil pencarian akan muncul di sini.</div>
+  <button id="btn_search" class="btn secondary" style="margin-top:8px">Cari</button>
+
+  <div id="hasilCari" style="margin-top:12px;min-height:80px">Hasil pencarian akan muncul di sini.</div>
 </div>
 
-<div class="card">
+<div class="card" style="margin-top:14px">
   <h3>Nota (Preview)</h3>
-  <div id="nota" class="nota-box">Belum ada transaksi.</div>
+  <div id="nota" class="nota-box" aria-live="polite">Belum ada transaksi.</div>
   <button id="btn_copy" class="copy-btn" style="display:none">SALIN NOTA</button>
 </div>
+
 </div>
 
 <aside>
-<div class="card">
-  <h3>Laporan & Statistik</h3>
 
-  <label>Rentang Waktu</label>
+<div class="card">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Laporan & Statistik</h3>
+
+  <label class="small">Rentang Waktu</label>
   <select id="report_range">
     <option value="30d">30 Hari Terakhir</option>
     <option value="bulan_ini">Bulan Ini</option>
@@ -182,9 +185,9 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
     <option value="semua" selected>Semua Transaksi</option>
   </select>
 
-  <button id="btn_report" class="btn">Tampilkan Laporan</button>
+  <button id="btn_report" class="btn" style="margin-top:10px">Tampilkan Laporan</button>
 
-  <div class="lap-row">
+  <div class="lap-row" style="margin-top:12px">
     <div class="stat">
       <h4 id="stat_count">0</h4>
       <p>Total Transaksi</p>
@@ -195,34 +198,46 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
     </div>
   </div>
 
-  <div>
-    <div id="report_list">Laporan akan muncul di sini.</div>
+  <div style="margin-top:12px">
+    <div id="report_list" style="background:#0b0b0b;padding:10px;border-radius:8px;border:1px solid #171717;font-family:monospace;white-space:pre-line;color:var(--muted);min-height:120px">
+    Laporan akan muncul di sini.
+    </div>
   </div>
 
-  <div>
-    <h4>📤 Export ke Telegram</h4>
-    <div id="telegramStatus"></div>
+  <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border)">
+    <h4 style="margin:0 0 10px 0;color:var(--accent-2)">📤 Export ke Telegram</h4>
     
-    <div class="row">
+    <div class="telegram-status" id="telegramStatus"></div>
+    
+    <div class="row" style="margin-top:10px">
       <div class="col">
-        <button id="btn_export_json" class="btn secondary">📥 Download JSON</button>
+        <button id="btn_export_json" class="btn secondary" style="background:#222">
+          📥 Download JSON
+        </button>
       </div>
       <div class="col">
-        <button id="btn_export_telegram" class="btn">📤 Kirim JSON ke Telegram</button>
+        <button id="btn_export_telegram" class="btn" style="background:#0088cc">
+          📤 Kirim JSON ke Telegram
+        </button>
       </div>
+    </div>
+    
+    <div style="margin-top:12px; font-size:12px; color:var(--muted); text-align:center">
+      Data akan dikirim ke Telegram kamu (ID: 6629230649)
     </div>
   </div>
 </div>
 
-<div class="card">
-  <h3>Panduan Singkat</h3>
-  <div>
+<div class="card" style="margin-top:14px">
+  <h3 style="margin:0 0 8px 0;color:var(--accent)">Panduan Singkat</h3>
+  <div style="color:var(--muted);font-size:13px;line-height:1.45">
     - Isi form lalu klik <strong>Buat Transaksi</strong>.<br>
     - Nota otomatis muncul & bisa disalin.<br>
     - Gunakan laporan untuk ringkasan periode.<br>
     - Data disimpan di localStorage (browser).
   </div>
 </div>
+
 </aside>
 </div>
 
@@ -335,19 +350,22 @@ btnCreate.addEventListener('click', ()=>{
   const db = loadDB();
   db.push(tx);
   saveDB(db);
-  renderNota(tx);
+  
+  try {
+    renderNota(tx);
+  } catch(error) {
+    console.error('Error render nota:', error);
+    alert('Transaksi berhasil dibuat! (Nota tidak bisa ditampilkan)');
+  }
 
   inpProd.value = '';
   inpPrice.value = '';
   inpQty.value = '1';
   inpPhone.value = '';
   inpWarranty.selectedIndex = 0;
-  alert('Transaksi berhasil dibuat!');
 });
 
-
-
-btnCopy.addEventListener('click', async ()function renderNota(tx){
+function renderNota(tx){
   const priceDisplay = formatRupiahFromNumber(Number(tx.harga));
   const notaText =
 `*✅ 𝗧𝗥𝗔𝗡𝗦𝗔𝗞𝗦𝗜 𝗗𝗢𝗡𝗘 ✅*
@@ -365,19 +383,21 @@ MOHON SIMPAN NOTA AGAR BISA KLAIM GARANSI!
 📲 𝗧𝗲𝗿𝗶𝗺𝗮 𝗸𝗮𝘀𝗶𝗵 𝘁𝗲𝗹𝗮𝗵 𝗺𝗲𝗺𝗶𝗹𝗶𝗵 𝗹𝗮𝘆𝗮𝗻𝗮𝗻 𝗸𝗮𝗺𝗶 💚
 🚀 𝗢𝗿𝗱𝗲𝗿 𝘀𝗲𝗹𝗮𝗻𝗷𝘂𝘁𝗻𝘆𝗮 𝗯𝗶𝘀𝗮 𝗹𝗲𝘄𝗮𝘁 𝘄𝗲𝗯 / 𝗰𝗵𝗮𝘁 𝗮𝗱𝗺𝗶𝗻!
 
-` + "`𝙂𝙍𝙐𝘽 𝙈𝘼𝙍𝙆𝙀𝙏𝙋𝙇𝘼𝘾𝙀`" + `
+GRUB MARKETPLACE
 https://chat.whatsapp.com/BuMum0qkZdkIKer75pqKUK
 
-*𝙅𝘼𝙉𝙂𝘼𝙉 𝙇𝙐𝙋𝘄 𝙁𝙊𝙇𝙊𝙒 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄 𝘿𝘼𝙉 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄 𝙆𝘼𝙈𝙄❗❗*
-` + "`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄`" + `
+*JANGAN LUPA FOLLOW CHANNEL TESTIMONI DAN INFORMASI KAMI❗❗*
+CHANNEL INFORMASI
 https://whatsapp.com/channel/0029VbB7FQv8PgsIvPPuJs2p
 
-` + "`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄`" + `
+CHANNEL TESTIMONI
 https://whatsapp.com/channel/0029Vb6w2Vf65yDE1ww29e0X`;
 
   notaBox.innerText = notaText;
   btnCopy.style.display = 'block';
-  }=>{
+}
+
+btnCopy.addEventListener('click', async ()=>{
   const text = notaBox.innerText || '';
   if (!text) return alert('Belum ada nota untuk disalin.');
   try{
@@ -476,12 +496,11 @@ btnExportTelegram.addEventListener('click', async ()=>{
   const cnt = localStorage.getItem(KEY_CNT) || '0';
   
   if (db.length === 0) {
-    alert('Tidak ada data transaksi untuk dikirim.');
+    showTelegramStatus('Tidak ada data transaksi untuk dikirim.', 'error');
     return;
   }
   
-  telegramStatus.textContent = '⏳ Mengirim JSON ke Telegram...';
-  telegramStatus.style.color = 'blue';
+  showTelegramStatus('⏳ Mengirim JSON ke Telegram...', 'sending');
   
   const exportData = {
     database: db,
@@ -507,18 +526,26 @@ btnExportTelegram.addEventListener('click', async ()=>{
     const result = await response.json();
     
     if (result.ok) {
-      telegramStatus.textContent = '✅ JSON berhasil dikirim ke Telegram!';
-      telegramStatus.style.color = 'green';
-      setTimeout(() => { telegramStatus.textContent = ''; }, 3000);
+      showTelegramStatus('✅ JSON berhasil dikirim ke Telegram!', 'success');
     } else {
-      telegramStatus.textContent = `❌ Gagal: ${result.description || 'Unknown error'}`;
-      telegramStatus.style.color = 'red';
+      showTelegramStatus(`❌ Gagal: ${result.description || 'Unknown error'}`, 'error');
     }
   } catch (error) {
-    telegramStatus.textContent = `❌ Error: ${error.message}`;
-    telegramStatus.style.color = 'red';
+    showTelegramStatus(`❌ Error: ${error.message}`, 'error');
   }
 });
+
+function showTelegramStatus(message, type) {
+  telegramStatus.textContent = message;
+  telegramStatus.className = 'telegram-status ' + type;
+  
+  // Auto hide after 5 seconds for success messages
+  if (type === 'success') {
+    setTimeout(() => {
+      telegramStatus.style.display = 'none';
+    }, 5000);
+  }
+}
 
 // ===== INISIALISASI =====
 (function init(){
@@ -530,4 +557,4 @@ btnExportTelegram.addEventListener('click', async ()=>{
 })();
 </script>
 </body>
-  </html>
+    </html>
