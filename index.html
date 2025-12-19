@@ -141,7 +141,7 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
   </div>
 
   <label>Nomor Pembeli</label>
-  <input id="tx_phone" type="text" placeholder="628xxx (tanpa +)">
+  <input id="tx_phone" type="text" placeholder="+628xxx atau 08xxx" onblur="formatPhoneNumber(this)">
 
   <label>Garansi</label>
   <select id="tx_warranty">
@@ -254,14 +254,25 @@ const btnExportJson = document.getElementById('btn_export_json');
 const btnExportTelegram = document.getElementById('btn_export_telegram');
 const telegramStatus = document.getElementById('telegramStatus');
 
+// ===== FUNGSI UTAMA =====
+
 function formatRupiahFromNumber(n){
   if (!n && n !== 0) return '0';
   return Number(n).toLocaleString('id-ID');
 }
+
 function formatRupiahInput(str){
   const digits = String(str).replace(/\D/g,'');
   if (!digits) return '';
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+// 🔧 FITUR BARU: Format Nomor Telepon
+function formatPhoneNumber(inputElement) {
+    let rawNumber = inputElement.value;
+    let cleanNumber = rawNumber.replace(/\D/g, '');
+    inputElement.value = cleanNumber;
+    console.log('Nomor dibersihkan dari "' + rawNumber + '" menjadi "' + cleanNumber + '"');
 }
 
 function loadDB(){
@@ -271,19 +282,24 @@ function loadDB(){
     return [];
   }
 }
+
 function saveDB(db){
   localStorage.setItem(KEY_DB, JSON.stringify(db));
 }
+
 function nextCounter(){
   let c = parseInt(localStorage.getItem(KEY_CNT) || '0', 10);
   c = c + 1;
   localStorage.setItem(KEY_CNT, String(c));
   return 1000 + c;
 }
+
 function genID(){
   const idnum = nextCounter();
   return 'BIMXYZ-' + idnum;
 }
+
+// ===== EVENT LISTENERS =====
 
 inpPrice.addEventListener('input', (e)=>{
   const cur = e.target.value;
@@ -341,7 +357,21 @@ function renderNota(tx){
 🆔 𝗶𝗱 𝘁𝗿𝗮𝗻𝘀𝗮𝗸𝘀𝗶 : ${tx.id}
 
 📝 *Note*
-MOHON SIMPAN NOTA AGAR BISA KLAIM GARANSI!`;
+MOHON SIMPAN NOTA AGAR BISA KLAIM GARANSI!
+
+🌐 𝗪𝗲𝗯𝘀𝗶𝘁𝗲 𝗥𝗲𝘀𝗺𝗶 : https://www.bimxyz.my.id
+📲 𝗧𝗲𝗿𝗶𝗺𝗮 𝗸𝗮𝘀𝗶𝗵 𝘁𝗲𝗹𝗮𝗵 𝗺𝗲𝗺𝗶𝗹𝗶𝗵 𝗹𝗮𝘆𝗮𝗻𝗮𝗻 𝗸𝗮𝗺𝗶 💚
+🚀 𝗢𝗿𝗱𝗲𝗿 𝘀𝗲𝗹𝗮𝗻𝗷𝘂𝘁𝗻𝘆𝗮 𝗯𝗶𝘀𝗮 𝗹𝗲𝘄𝗮𝘁 𝘄𝗲𝗯 / 𝗰𝗵𝗮𝘁 𝗮𝗱𝗺𝗶𝗻!
+
+`𝙂𝙍𝙐𝘽 𝙈𝘼𝙍𝙆𝙀𝙏𝙋𝙇𝘼𝘾𝙀`
+https://chat.whatsapp.com/BuMum0qkZdkIKer75pqKUK
+
+*𝙅𝘼𝙉𝙂𝘼𝙉 𝙇𝙐𝙋𝘼 𝙁𝙊𝙇𝙊𝙒 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄 𝘿𝘼𝙉 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄 𝙆𝘼𝙈𝙄❗❗*
+`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄`
+https://whatsapp.com/channel/0029VbB7FQv8PgsIvPPuJs2p
+
+`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄`
+https://whatsapp.com/channel/0029Vb6w2Vf65yDE1ww29e0X`;
   notaBox.innerText = notaText;
   btnCopy.style.display = 'block';
 }
@@ -489,6 +519,7 @@ btnExportTelegram.addEventListener('click', async ()=>{
   }
 });
 
+// ===== INISIALISASI =====
 (function init(){
   if (!localStorage.getItem(KEY_CNT)) {
     const db = loadDB();
@@ -498,4 +529,4 @@ btnExportTelegram.addEventListener('click', async ()=>{
 })();
 </script>
 </body>
-</html>
+    </html>
