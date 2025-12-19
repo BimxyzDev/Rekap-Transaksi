@@ -345,7 +345,9 @@ btnCreate.addEventListener('click', ()=>{
   alert('Transaksi berhasil dibuat!');
 });
 
-function renderNota(tx){
+
+
+btnCopy.addEventListener('click', async ()function renderNota(tx){
   const priceDisplay = formatRupiahFromNumber(Number(tx.harga));
   const notaText =
 `*✅ 𝗧𝗥𝗔𝗡𝗦𝗔𝗞𝗦𝗜 𝗗𝗢𝗡𝗘 ✅*
@@ -363,21 +365,19 @@ MOHON SIMPAN NOTA AGAR BISA KLAIM GARANSI!
 📲 𝗧𝗲𝗿𝗶𝗺𝗮 𝗸𝗮𝘀𝗶𝗵 𝘁𝗲𝗹𝗮𝗵 𝗺𝗲𝗺𝗶𝗹𝗶𝗵 𝗹𝗮𝘆𝗮𝗻𝗮𝗻 𝗸𝗮𝗺𝗶 💚
 🚀 𝗢𝗿𝗱𝗲𝗿 𝘀𝗲𝗹𝗮𝗻𝗷𝘂𝘁𝗻𝘆𝗮 𝗯𝗶𝘀𝗮 𝗹𝗲𝘄𝗮𝘁 𝘄𝗲𝗯 / 𝗰𝗵𝗮𝘁 𝗮𝗱𝗺𝗶𝗻!
 
-`𝙂𝙍𝙐𝘽 𝙈𝘼𝙍𝙆𝙀𝙏𝙋𝙇𝘼𝘾𝙀`
+` + "`𝙂𝙍𝙐𝘽 𝙈𝘼𝙍𝙆𝙀𝙏𝙋𝙇𝘼𝘾𝙀`" + `
 https://chat.whatsapp.com/BuMum0qkZdkIKer75pqKUK
 
-*𝙅𝘼𝙉𝙂𝘼𝙉 𝙇𝙐𝙋𝘼 𝙁𝙊𝙇𝙊𝙒 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄 𝘿𝘼𝙉 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄 𝙆𝘼𝙈𝙄❗❗*
-`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄`
+*𝙅𝘼𝙉𝙂𝘼𝙉 𝙇𝙐𝙋𝘄 𝙁𝙊𝙇𝙊𝙒 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄 𝘿𝘼𝙉 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄 𝙆𝘼𝙈𝙄❗❗*
+` + "`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝙉𝙁𝙊𝙍𝙈𝘼𝙎𝙄`" + `
 https://whatsapp.com/channel/0029VbB7FQv8PgsIvPPuJs2p
 
-`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄`
-https://whatsapp.com/channel/0029Vb6w2Vf65yDE1ww29e0X
-`;
+` + "`𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙏𝙀𝙎𝙏𝙄𝙈𝙊𝙉𝙄`" + `
+https://whatsapp.com/channel/0029Vb6w2Vf65yDE1ww29e0X`;
+
   notaBox.innerText = notaText;
   btnCopy.style.display = 'block';
-}
-
-btnCopy.addEventListener('click', async ()=>{
+  }=>{
   const text = notaBox.innerText || '';
   if (!text) return alert('Belum ada nota untuk disalin.');
   try{
