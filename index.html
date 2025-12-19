@@ -141,7 +141,7 @@ footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
   </div>
 
   <label>Nomor Pembeli</label>
-  <input id="tx_phone" type="text" placeholder="+628xxx atau 08xxx" onblur="formatPhoneNumber(this)">
+  <input id="tx_phone" type="text" placeholder="628xxx (tanpa +)">
 
   <label>Garansi</label>
   <select id="tx_warranty">
@@ -254,25 +254,14 @@ const btnExportJson = document.getElementById('btn_export_json');
 const btnExportTelegram = document.getElementById('btn_export_telegram');
 const telegramStatus = document.getElementById('telegramStatus');
 
-// ===== FUNGSI UTAMA =====
-
 function formatRupiahFromNumber(n){
   if (!n && n !== 0) return '0';
   return Number(n).toLocaleString('id-ID');
 }
-
 function formatRupiahInput(str){
   const digits = String(str).replace(/\D/g,'');
   if (!digits) return '';
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-// 🔧 FITUR BARU: Format Nomor Telepon
-function formatPhoneNumber(inputElement) {
-    let rawNumber = inputElement.value;
-    let cleanNumber = rawNumber.replace(/\D/g, '');
-    inputElement.value = cleanNumber;
-    console.log('Nomor dibersihkan dari "' + rawNumber + '" menjadi "' + cleanNumber + '"');
 }
 
 function loadDB(){
@@ -282,24 +271,19 @@ function loadDB(){
     return [];
   }
 }
-
 function saveDB(db){
   localStorage.setItem(KEY_DB, JSON.stringify(db));
 }
-
 function nextCounter(){
   let c = parseInt(localStorage.getItem(KEY_CNT) || '0', 10);
   c = c + 1;
   localStorage.setItem(KEY_CNT, String(c));
   return 1000 + c;
 }
-
 function genID(){
   const idnum = nextCounter();
   return 'BIMXYZ-' + idnum;
 }
-
-// ===== EVENT LISTENERS =====
 
 inpPrice.addEventListener('input', (e)=>{
   const cur = e.target.value;
@@ -519,7 +503,6 @@ btnExportTelegram.addEventListener('click', async ()=>{
   }
 });
 
-// ===== INISIALISASI =====
 (function init(){
   if (!localStorage.getItem(KEY_CNT)) {
     const db = loadDB();
@@ -529,4 +512,4 @@ btnExportTelegram.addEventListener('click', async ()=>{
 })();
 </script>
 </body>
-  </html>
+    </html>
